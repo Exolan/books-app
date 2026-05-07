@@ -6,6 +6,8 @@ type User {
   name: String
   email: String
   password: PasswordState
+  reviews(where: ReviewWhereInput! = {}, orderBy: [ReviewOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ReviewWhereUniqueInput): [Review!]
+  reviewsCount(where: ReviewWhereInput! = {}): Int
 }
 
 type PasswordState {
@@ -24,6 +26,7 @@ input UserWhereInput {
   id: IDFilter
   name: StringFilter
   email: StringFilter
+  reviews: ReviewManyRelationFilter
 }
 
 input IDFilter {
@@ -71,6 +74,12 @@ input NestedStringFilter {
   not: NestedStringFilter
 }
 
+input ReviewManyRelationFilter {
+  every: ReviewWhereInput
+  some: ReviewWhereInput
+  none: ReviewWhereInput
+}
+
 input UserOrderByInput {
   id: OrderDirection
   name: OrderDirection
@@ -86,6 +95,14 @@ input UserUpdateInput {
   name: String
   email: String
   password: String
+  reviews: ReviewRelateToManyForUpdateInput
+}
+
+input ReviewRelateToManyForUpdateInput {
+  disconnect: [ReviewWhereUniqueInput!]
+  set: [ReviewWhereUniqueInput!]
+  create: [ReviewCreateInput!]
+  connect: [ReviewWhereUniqueInput!]
 }
 
 input UserUpdateArgs {
@@ -97,6 +114,292 @@ input UserCreateInput {
   name: String
   email: String
   password: String
+  reviews: ReviewRelateToManyForCreateInput
+}
+
+input ReviewRelateToManyForCreateInput {
+  create: [ReviewCreateInput!]
+  connect: [ReviewWhereUniqueInput!]
+}
+
+type Author {
+  id: ID!
+  firstName: String
+  lastName: String
+  books(where: BookWhereInput! = {}, orderBy: [BookOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: BookWhereUniqueInput): [Book!]
+  booksCount(where: BookWhereInput! = {}): Int
+}
+
+input AuthorWhereUniqueInput {
+  id: ID
+}
+
+input AuthorWhereInput {
+  AND: [AuthorWhereInput!]
+  OR: [AuthorWhereInput!]
+  NOT: [AuthorWhereInput!]
+  id: IDFilter
+  firstName: StringFilter
+  lastName: StringFilter
+  books: BookManyRelationFilter
+}
+
+input BookManyRelationFilter {
+  every: BookWhereInput
+  some: BookWhereInput
+  none: BookWhereInput
+}
+
+input AuthorOrderByInput {
+  id: OrderDirection
+  firstName: OrderDirection
+  lastName: OrderDirection
+}
+
+input AuthorUpdateInput {
+  firstName: String
+  lastName: String
+  books: BookRelateToManyForUpdateInput
+}
+
+input BookRelateToManyForUpdateInput {
+  disconnect: [BookWhereUniqueInput!]
+  set: [BookWhereUniqueInput!]
+  create: [BookCreateInput!]
+  connect: [BookWhereUniqueInput!]
+}
+
+input AuthorUpdateArgs {
+  where: AuthorWhereUniqueInput!
+  data: AuthorUpdateInput!
+}
+
+input AuthorCreateInput {
+  firstName: String
+  lastName: String
+  books: BookRelateToManyForCreateInput
+}
+
+input BookRelateToManyForCreateInput {
+  create: [BookCreateInput!]
+  connect: [BookWhereUniqueInput!]
+}
+
+type Genre {
+  id: ID!
+  name: String
+  books(where: BookWhereInput! = {}, orderBy: [BookOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: BookWhereUniqueInput): [Book!]
+  booksCount(where: BookWhereInput! = {}): Int
+}
+
+input GenreWhereUniqueInput {
+  id: ID
+}
+
+input GenreWhereInput {
+  AND: [GenreWhereInput!]
+  OR: [GenreWhereInput!]
+  NOT: [GenreWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  books: BookManyRelationFilter
+}
+
+input GenreOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+}
+
+input GenreUpdateInput {
+  name: String
+  books: BookRelateToManyForUpdateInput
+}
+
+input GenreUpdateArgs {
+  where: GenreWhereUniqueInput!
+  data: GenreUpdateInput!
+}
+
+input GenreCreateInput {
+  name: String
+  books: BookRelateToManyForCreateInput
+}
+
+type Book {
+  id: ID!
+  title: String
+  author: Author
+  genre(where: GenreWhereInput! = {}, orderBy: [GenreOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: GenreWhereUniqueInput): [Genre!]
+  genreCount(where: GenreWhereInput! = {}): Int
+  reviews(where: ReviewWhereInput! = {}, orderBy: [ReviewOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ReviewWhereUniqueInput): [Review!]
+  reviewsCount(where: ReviewWhereInput! = {}): Int
+}
+
+input BookWhereUniqueInput {
+  id: ID
+}
+
+input BookWhereInput {
+  AND: [BookWhereInput!]
+  OR: [BookWhereInput!]
+  NOT: [BookWhereInput!]
+  id: IDFilter
+  title: StringFilter
+  author: AuthorWhereInput
+  genre: GenreManyRelationFilter
+  reviews: ReviewManyRelationFilter
+}
+
+input GenreManyRelationFilter {
+  every: GenreWhereInput
+  some: GenreWhereInput
+  none: GenreWhereInput
+}
+
+input BookOrderByInput {
+  id: OrderDirection
+  title: OrderDirection
+}
+
+input BookUpdateInput {
+  title: String
+  author: AuthorRelateToOneForUpdateInput
+  genre: GenreRelateToManyForUpdateInput
+  reviews: ReviewRelateToManyForUpdateInput
+}
+
+input AuthorRelateToOneForUpdateInput {
+  create: AuthorCreateInput
+  connect: AuthorWhereUniqueInput
+  disconnect: Boolean
+}
+
+input GenreRelateToManyForUpdateInput {
+  disconnect: [GenreWhereUniqueInput!]
+  set: [GenreWhereUniqueInput!]
+  create: [GenreCreateInput!]
+  connect: [GenreWhereUniqueInput!]
+}
+
+input BookUpdateArgs {
+  where: BookWhereUniqueInput!
+  data: BookUpdateInput!
+}
+
+input BookCreateInput {
+  title: String
+  author: AuthorRelateToOneForCreateInput
+  genre: GenreRelateToManyForCreateInput
+  reviews: ReviewRelateToManyForCreateInput
+}
+
+input AuthorRelateToOneForCreateInput {
+  create: AuthorCreateInput
+  connect: AuthorWhereUniqueInput
+}
+
+input GenreRelateToManyForCreateInput {
+  create: [GenreCreateInput!]
+  connect: [GenreWhereUniqueInput!]
+}
+
+type Review {
+  id: ID!
+  user: User
+  book: Book
+  text: String
+  createdAt: DateTime
+  score: Int
+}
+
+scalar DateTime @specifiedBy(url: "https://datatracker.ietf.org/doc/html/rfc3339#section-5.6")
+
+input ReviewWhereUniqueInput {
+  id: ID
+}
+
+input ReviewWhereInput {
+  AND: [ReviewWhereInput!]
+  OR: [ReviewWhereInput!]
+  NOT: [ReviewWhereInput!]
+  id: IDFilter
+  user: UserWhereInput
+  book: BookWhereInput
+  text: StringFilter
+  createdAt: DateTimeNullableFilter
+  score: IntFilter
+}
+
+input DateTimeNullableFilter {
+  equals: DateTime
+  in: [DateTime!]
+  notIn: [DateTime!]
+  lt: DateTime
+  lte: DateTime
+  gt: DateTime
+  gte: DateTime
+  not: DateTimeNullableFilter
+}
+
+input IntFilter {
+  equals: Int
+  in: [Int!]
+  notIn: [Int!]
+  lt: Int
+  lte: Int
+  gt: Int
+  gte: Int
+  not: IntFilter
+}
+
+input ReviewOrderByInput {
+  id: OrderDirection
+  text: OrderDirection
+  createdAt: OrderDirection
+  score: OrderDirection
+}
+
+input ReviewUpdateInput {
+  user: UserRelateToOneForUpdateInput
+  book: BookRelateToOneForUpdateInput
+  text: String
+  createdAt: DateTime
+  score: Int
+}
+
+input UserRelateToOneForUpdateInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
+  disconnect: Boolean
+}
+
+input BookRelateToOneForUpdateInput {
+  create: BookCreateInput
+  connect: BookWhereUniqueInput
+  disconnect: Boolean
+}
+
+input ReviewUpdateArgs {
+  where: ReviewWhereUniqueInput!
+  data: ReviewUpdateInput!
+}
+
+input ReviewCreateInput {
+  user: UserRelateToOneForCreateInput
+  book: BookRelateToOneForCreateInput
+  text: String
+  createdAt: DateTime
+  score: Int
+}
+
+input UserRelateToOneForCreateInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
+}
+
+input BookRelateToOneForCreateInput {
+  create: BookCreateInput
+  connect: BookWhereUniqueInput
 }
 
 """
@@ -111,12 +414,48 @@ type Mutation {
   updateUsers(data: [UserUpdateArgs!]!): [User]
   deleteUser(where: UserWhereUniqueInput!): User
   deleteUsers(where: [UserWhereUniqueInput!]!): [User]
+  createAuthor(data: AuthorCreateInput!): Author
+  createAuthors(data: [AuthorCreateInput!]!): [Author]
+  updateAuthor(where: AuthorWhereUniqueInput!, data: AuthorUpdateInput!): Author
+  updateAuthors(data: [AuthorUpdateArgs!]!): [Author]
+  deleteAuthor(where: AuthorWhereUniqueInput!): Author
+  deleteAuthors(where: [AuthorWhereUniqueInput!]!): [Author]
+  createGenre(data: GenreCreateInput!): Genre
+  createGenres(data: [GenreCreateInput!]!): [Genre]
+  updateGenre(where: GenreWhereUniqueInput!, data: GenreUpdateInput!): Genre
+  updateGenres(data: [GenreUpdateArgs!]!): [Genre]
+  deleteGenre(where: GenreWhereUniqueInput!): Genre
+  deleteGenres(where: [GenreWhereUniqueInput!]!): [Genre]
+  createBook(data: BookCreateInput!): Book
+  createBooks(data: [BookCreateInput!]!): [Book]
+  updateBook(where: BookWhereUniqueInput!, data: BookUpdateInput!): Book
+  updateBooks(data: [BookUpdateArgs!]!): [Book]
+  deleteBook(where: BookWhereUniqueInput!): Book
+  deleteBooks(where: [BookWhereUniqueInput!]!): [Book]
+  createReview(data: ReviewCreateInput!): Review
+  createReviews(data: [ReviewCreateInput!]!): [Review]
+  updateReview(where: ReviewWhereUniqueInput!, data: ReviewUpdateInput!): Review
+  updateReviews(data: [ReviewUpdateArgs!]!): [Review]
+  deleteReview(where: ReviewWhereUniqueInput!): Review
+  deleteReviews(where: [ReviewWhereUniqueInput!]!): [Review]
 }
 
 type Query {
   user(where: UserWhereUniqueInput!): User
   users(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
   usersCount(where: UserWhereInput! = {}): Int
+  author(where: AuthorWhereUniqueInput!): Author
+  authors(where: AuthorWhereInput! = {}, orderBy: [AuthorOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AuthorWhereUniqueInput): [Author!]
+  authorsCount(where: AuthorWhereInput! = {}): Int
+  genre(where: GenreWhereUniqueInput!): Genre
+  genres(where: GenreWhereInput! = {}, orderBy: [GenreOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: GenreWhereUniqueInput): [Genre!]
+  genresCount(where: GenreWhereInput! = {}): Int
+  book(where: BookWhereUniqueInput!): Book
+  books(where: BookWhereInput! = {}, orderBy: [BookOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: BookWhereUniqueInput): [Book!]
+  booksCount(where: BookWhereInput! = {}): Int
+  review(where: ReviewWhereUniqueInput!): Review
+  reviews(where: ReviewWhereInput! = {}, orderBy: [ReviewOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ReviewWhereUniqueInput): [Review!]
+  reviewsCount(where: ReviewWhereInput! = {}): Int
   keystone: KeystoneMeta!
 }
 

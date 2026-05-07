@@ -12,8 +12,47 @@ generator client {
 }
 
 model User {
-  id       String @id @default(cuid())
-  name     String @default("")
-  email    String @unique @default("")
+  id       String   @id @default(cuid())
+  name     String   @default("")
+  email    String   @unique @default("")
   password String
+  reviews  Review[] @relation("Review_user")
+}
+
+model Author {
+  id        String @id @default(cuid())
+  firstName String @default("")
+  lastName  String @default("")
+  books     Book[] @relation("Book_author")
+}
+
+model Genre {
+  id    String @id @default(cuid())
+  name  String @default("")
+  books Book[] @relation("Book_genre")
+}
+
+model Book {
+  id       String   @id @default(cuid())
+  title    String   @default("")
+  author   Author?  @relation("Book_author", fields: [authorId], references: [id])
+  authorId String?  @map("author")
+  genre    Genre[]  @relation("Book_genre")
+  reviews  Review[] @relation("Review_book")
+
+  @@index([authorId])
+}
+
+model Review {
+  id        String    @id @default(cuid())
+  user      User?     @relation("Review_user", fields: [userId], references: [id])
+  userId    String?   @map("user")
+  book      Book?     @relation("Review_book", fields: [bookId], references: [id])
+  bookId    String?   @map("book")
+  text      String    @default("")
+  createdAt DateTime?
+  score     Int
+
+  @@index([userId])
+  @@index([bookId])
 }
