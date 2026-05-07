@@ -2,7 +2,6 @@ import { list } from '@keystone-6/core'
 import { allowAll } from '@keystone-6/core/access'
 
 import { text, password, relationship, timestamp, integer } from '@keystone-6/core/fields'
-import { create } from 'domain'
 
 type Session = {
   data: {

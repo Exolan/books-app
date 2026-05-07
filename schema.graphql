@@ -557,6 +557,7 @@ type Query {
   reviewsCount(where: ReviewWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
+  averageScore(bookId: ID!): Float
 }
 
 union AuthenticatedItem = User

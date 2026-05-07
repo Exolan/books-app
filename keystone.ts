@@ -3,6 +3,8 @@ import { lists } from './src/keystone/schema'
 import { config } from '@keystone-6/core'
 import * as dotenv from 'dotenv'
 import { statelessSessions } from '@keystone-6/core/session'
+import { GraphQLSchema } from 'graphql'
+import { mergeSchemas } from 'graphql-yoga'
 
 dotenv.config()
 const DATABASE_URL = process.env.DATABASE_URL
@@ -30,6 +32,30 @@ export default withAuth(
       url: DATABASE_URL || `postgresql://postgres:postgres@127.0.0.1:25432/main`
     },
     lists,
-    session
+    session,
+    graphql: {
+      extendGraphqlSchema: (schema: GraphQLSchema) => {
+        return mergeSchemas({
+          schemas: [schema],
+          typeDefs: `
+            type Query {
+              averageScore(bookId: ID!): Float
+            }
+          `,
+          resolvers: {
+            Query: {
+              averageScore: async (_, { bookId }, context) => {
+                const result = await context.prisma.review.aggregate({
+                  _avg: { score: true },
+                  where: { bookId }
+                })
+
+                return result._avg.score ?? 0
+              }
+            }
+          }
+        })
+      }
+    }
   })
 )
