@@ -2,7 +2,6 @@ import { list } from '@keystone-6/core'
 import { allowAll } from '@keystone-6/core/access'
 
 import { text, password, relationship, timestamp, integer } from '@keystone-6/core/fields'
-import { create } from 'domain'
 
 type Session = {
   data: {
@@ -16,7 +15,7 @@ const isAuth = ({ session }: { session?: Session }) => Boolean(session?.data.id)
 
 export const lists = {
   User: list({
-    access: allowAll,
+    access: { operation: { query: isAuth, create: isAuth, update: isAuth, delete: isAuth } },
 
     // this is the fields for our User list
     fields: {
@@ -59,7 +58,7 @@ export const lists = {
   }),
 
   Author: list({
-    access: allowAll,
+    access: { operation: { query: isAuth, create: isAuth, update: isAuth, delete: isAuth } },
 
     fields: {
       firstName: text({ validation: { isRequired: true } }),
@@ -89,7 +88,7 @@ export const lists = {
   }),
 
   Genre: list({
-    access: allowAll,
+    access: { operation: { query: isAuth, create: isAuth, update: isAuth, delete: isAuth } },
 
     fields: {
       name: text({ validation: { isRequired: true }, isIndexed: 'unique' }),
@@ -118,7 +117,7 @@ export const lists = {
   }),
 
   Book: list({
-    access: allowAll,
+    access: { operation: { query: allowAll, create: isAuth, update: isAuth, delete: isAuth } },
 
     fields: {
       title: text({ validation: { isRequired: true }, isIndexed: 'unique' }),
