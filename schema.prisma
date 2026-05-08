@@ -18,7 +18,6 @@ model User {
   password              String
   reviews               Review[]  @relation("Review_user")
   createdAt             DateTime?
-  updatedAt             DateTime?
   from_Author_createdBy Author[]  @relation("Author_createdBy")
   from_Author_updatedBy Author[]  @relation("Author_updatedBy")
   from_Genre_createdBy  Genre[]   @relation("Genre_createdBy")
