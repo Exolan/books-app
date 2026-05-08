@@ -38,9 +38,9 @@ export default withAuth(
         return mergeSchemas({
           schemas: [schema],
           typeDefs: `
-            type Query {
-              averageScore(bookId: ID!): Float
-            }
+            extend type Query {
+    averageScore(bookId: ID!): Float
+  }
           `,
           resolvers: {
             Query: {
