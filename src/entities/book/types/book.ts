@@ -9,6 +9,15 @@ export type Book = {
   genre: {
     id: string
     name: string
-  }
-  //   reviews: Review[]
+  }[]
+  reviews: {
+    id: string
+    text: string
+    score: number
+    createdAt: Date
+    user: {
+      id: string
+      name: string
+    }
+  }[]
 }
