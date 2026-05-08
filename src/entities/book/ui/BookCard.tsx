@@ -1,10 +1,16 @@
+import { useRouter } from 'next/navigation'
 import { Book } from '../types/book'
 
 export default function BookCard({ book }: { book: Book }) {
+  const { push } = useRouter()
   const average = book.reviews.reduce((acc, review) => acc + review.score, 0) / book.reviews.length
 
+  const handleClick = () => {
+    push(`/books/${book.id}`)
+  }
+
   return (
-    <div style={{ border: '1px solid #ccc', borderRadius: '8px', padding: '16px', marginBottom: '16px', cursor: 'pointer' }}>
+    <div style={{ border: '1px solid #ccc', borderRadius: '8px', padding: '16px', marginBottom: '16px', cursor: 'pointer' }} onClick={handleClick}>
       <h2>{book.title}</h2>
       <h4>
         {book.author.firstName} {book.author.lastName}
