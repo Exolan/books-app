@@ -1,8 +1,7 @@
 const prettierSettings = require('./prettierSettings')
 
 module.exports = {
-  $schema:
-    'https://json.schemastore.org/eslintrc',
+  $schema: 'https://json.schemastore.org/eslintrc',
   root: true,
   env: {
     browser: true,
@@ -24,12 +23,7 @@ module.exports = {
     ecmaVersion: 'latest',
     sourceType: 'module'
   },
-  plugins: [
-    'tailwindcss',
-    'react',
-    'react-perf',
-    'prettier'
-  ],
+  plugins: ['tailwindcss', 'react', 'react-perf', 'prettier'],
   rules: {
     'react/react-in-jsx-scope': 'off',
     'react/prop-types': 'off',
@@ -37,26 +31,17 @@ module.exports = {
     'no-unused-vars': 'warn',
     'import/no-anonymous-default-export': 'off',
     'react-hooks/exhaustive-deps': 'warn',
-    'react-perf/jsx-no-new-function-as-prop':
-      'warn',
+    'react-perf/jsx-no-new-function-as-prop': 'warn',
     'react-perf/jsx-no-new-array-as-prop': 'warn',
-    'react-perf/jsx-no-new-object-as-prop':
-      'warn',
+    'react-perf/jsx-no-new-object-as-prop': 'warn',
     '@next/next/no-html-link-for-pages': 'off',
     'react/jsx-key': 'off',
     'tailwindcss/no-custom-classname': 'off',
-    'prettier/prettier': [
-      'error',
-      prettierSettings
-    ],
+    'prettier/prettier': ['error', prettierSettings],
     'import/order': [
       'error',
       {
-        groups: [
-          ['builtin', 'external'],
-          'internal',
-          ['parent', 'sibling', 'index']
-        ]
+        groups: [['builtin', 'external'], 'internal', ['parent', 'sibling', 'index']]
       }
     ]
   },
@@ -75,5 +60,27 @@ module.exports = {
       files: ['*.ts', '*.tsx'],
       parser: '@typescript-eslint/parser'
     }
-  ]
+  ],
+  rules: {
+    'boundaries/dependencies': [
+      'error',
+      {
+        default: 'disallow',
+        rules: [
+          {
+            from: 'features',
+            allow: ['entities', 'shared', 'features']
+          },
+          {
+            from: 'entities',
+            allow: ['shared', 'entities']
+          },
+          {
+            from: 'shared',
+            allow: ['shared']
+          }
+        ]
+      }
+    ]
+  }
 }

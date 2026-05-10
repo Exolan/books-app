@@ -1,7 +1,7 @@
 import { useMutation } from '@apollo/client'
-import { SIGN_OUT } from '../api/signOutUser'
+import { SIGN_OUT } from '../api/'
 
-export default function useSignOut() {
+export function useSignOut() {
   const [signOut, { loading, error }] = useMutation(SIGN_OUT)
 
   return { signOut, loading, error }

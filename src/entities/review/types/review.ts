@@ -1,10 +1,9 @@
+import { User } from 'src/entities/user'
+
 export type Review = {
   id: string
   text: string
   score: number
-  user: {
-    id: string
-    name: string
-  }
+  user: User
   createdAt: string
 }

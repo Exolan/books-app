@@ -1,8 +1,9 @@
 import { useQuery } from '@apollo/client'
-import { GET_BOOKS } from '../api/getBooks'
+import { GET_BOOKS } from '../api/'
+import { GetBooksResponse, UseBooksResult } from '../types/book'
 
-export function useBooks() {
-  const { data, loading, error } = useQuery(GET_BOOKS)
+export function useBooks(): UseBooksResult {
+  const { data, loading, error } = useQuery<GetBooksResponse>(GET_BOOKS)
 
   return {
     books: data?.books ?? [],

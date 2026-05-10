@@ -1,13 +1,14 @@
 import { useQuery } from '@apollo/client'
-import { GET_BOOK_BY_ID } from '../api/getBookById'
+import { GET_BOOK_BY_ID } from '../api/'
+import { GetBookByIdResponse, UseBookResult } from '../types/book'
 
-export default function useBook(bookId: string) {
-  const { data, loading, error } = useQuery(GET_BOOK_BY_ID, {
+export function useBook(bookId: string): UseBookResult {
+  const { data, loading, error } = useQuery<GetBookByIdResponse>(GET_BOOK_BY_ID, {
     variables: { id: bookId }
   })
 
   return {
-    book: data?.book,
+    book: data?.book ?? null, // Явно, чтобы не было undefined
     loading,
     error
   }

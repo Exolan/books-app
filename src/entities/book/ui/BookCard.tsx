@@ -1,7 +1,7 @@
 import { useRouter } from 'next/navigation'
 import { Book } from '../types/book'
 
-export default function BookCard({ book }: { book: Book }) {
+export function BookCard({ book }: { book: Book }) {
   const { push } = useRouter()
   const average = book.reviews.reduce((acc, review) => acc + review.score, 0) / book.reviews.length
 

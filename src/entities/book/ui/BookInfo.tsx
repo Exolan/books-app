@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import Button from '../../../shared/ui/Button'
 import { useAuth } from '../../user/model/useAuth'
-import useBook from '../model/useBook'
+import { useBook } from '../model/useBook'
 import MyModal from '../../../shared/ui/Modal'
 import CreateReviewForm from '../../../features/review/createReview/ui/CreateReviewForm'
 import { Review } from '../../review/types/review'
 import ReviewCard from '../../review'
 
-export default function BookInfo({ bookId }: { bookId: string }) {
+export function BookInfo({ bookId }: { bookId: string }) {
   const { book, loading, error } = useBook(bookId)
   const { user } = useAuth()
   const [isModal, setIsModal] = useState(false)
