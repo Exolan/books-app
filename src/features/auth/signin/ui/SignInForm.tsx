@@ -10,8 +10,17 @@ export function SignInForm() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const formData = new FormData(event.currentTarget)
-    const email = formData.get('email') as string // Захардкожено
-    const password = formData.get('password') as string
+    const email = formData.get('email')
+    const password = formData.get('password')
+
+    if (typeof email !== 'string' || !email) {
+      alert('Введите корректный email')
+      return
+    }
+    if (typeof password !== 'string' || !password) {
+      alert('Введите пароль')
+      return
+    }
 
     signIn({ variables: { email, password } })
   }

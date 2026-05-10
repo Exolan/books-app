@@ -10,9 +10,22 @@ export function SignUpForm() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const formData = new FormData(event.currentTarget)
-    const email = formData.get('email') as string
-    const password = formData.get('password') as string
-    const name = formData.get('name') as string
+    const email = formData.get('email')
+    const password = formData.get('password')
+    const name = formData.get('name')
+
+    if (typeof email !== 'string' || !email) {
+      alert('Введите корректный email')
+      return
+    }
+    if (typeof password !== 'string' || !password) {
+      alert('Введите пароль')
+      return
+    }
+    if (typeof name !== 'string' || !name) {
+      alert('Введите корректное имя')
+      return
+    }
 
     signUp({ variables: { email, password, name } })
   }
