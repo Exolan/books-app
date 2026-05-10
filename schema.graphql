@@ -393,11 +393,11 @@ type Review {
   user: User
   book: Book
   text: String
+  score: Int
   createdAt: DateTime
   updatedAt: DateTime
   createdBy: User
   updatedBy: User
-  score: Int
 }
 
 input ReviewWhereUniqueInput {
@@ -412,11 +412,11 @@ input ReviewWhereInput {
   user: UserWhereInput
   book: BookWhereInput
   text: StringFilter
+  score: IntFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
   createdBy: UserWhereInput
   updatedBy: UserWhereInput
-  score: IntFilter
 }
 
 input IntFilter {
@@ -433,20 +433,20 @@ input IntFilter {
 input ReviewOrderByInput {
   id: OrderDirection
   text: OrderDirection
+  score: OrderDirection
   createdAt: OrderDirection
   updatedAt: OrderDirection
-  score: OrderDirection
 }
 
 input ReviewUpdateInput {
   user: UserRelateToOneForUpdateInput
   book: BookRelateToOneForUpdateInput
   text: String
+  score: Int
   createdAt: DateTime
   updatedAt: DateTime
   createdBy: UserRelateToOneForUpdateInput
   updatedBy: UserRelateToOneForUpdateInput
-  score: Int
 }
 
 input BookRelateToOneForUpdateInput {
@@ -464,11 +464,11 @@ input ReviewCreateInput {
   user: UserRelateToOneForCreateInput
   book: BookRelateToOneForCreateInput
   text: String
+  score: Int
   createdAt: DateTime
   updatedAt: DateTime
   createdBy: UserRelateToOneForCreateInput
   updatedBy: UserRelateToOneForCreateInput
-  score: Int
 }
 
 input BookRelateToOneForCreateInput {

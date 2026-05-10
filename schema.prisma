@@ -85,14 +85,15 @@ model Review {
   book        Book?     @relation("Review_book", fields: [bookId], references: [id])
   bookId      String?   @map("book")
   text        String    @default("")
+  score       Int
   createdAt   DateTime?
   updatedAt   DateTime?
   createdBy   User?     @relation("Review_createdBy", fields: [createdById], references: [id])
   createdById String?   @map("createdBy")
   updatedBy   User?     @relation("Review_updatedBy", fields: [updatedById], references: [id])
   updatedById String?   @map("updatedBy")
-  score       Int
 
+  @@unique([userId, bookId])
   @@index([userId])
   @@index([bookId])
   @@index([createdById])

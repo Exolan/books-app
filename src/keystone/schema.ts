@@ -1,10 +1,39 @@
 import { list } from '@keystone-6/core'
 import { allowAll } from '@keystone-6/core/access'
-
 import { text, password, relationship, timestamp, integer } from '@keystone-6/core/fields'
+import { GraphQLSchema } from 'graphql'
 
-const isAuth = ({ session }: any) => {
-  return !!session
+const isAuth = ({ session }: any) => !!session
+
+const authAccess = {
+  operation: {
+    query: allowAll,
+    create: isAuth,
+    update: isAuth,
+    delete: isAuth
+  }
+}
+
+const withTimestamps = ({ operation, resolvedData, context }: any) => {
+  const userId = context.session?.data.id
+
+  if (operation === 'create') {
+    return {
+      ...resolvedData,
+      createdAt: new Date(),
+      createdBy: userId ? { connect: { id: userId } } : undefined
+    }
+  }
+
+  if (operation === 'update') {
+    return {
+      ...resolvedData,
+      updatedAt: new Date(),
+      updatedBy: userId ? { connect: { id: userId } } : undefined
+    }
+  }
+
+  return resolvedData
 }
 
 export const lists = {
@@ -12,17 +41,12 @@ export const lists = {
     access: {
       operation: {
         query: allowAll,
-
-        // РЕГИСТРАЦИЯ ДОСТУПНА ВСЕМ
         create: allowAll,
-
-        // А вот менять/удалять только авторизованным
         update: isAuth,
         delete: isAuth
       }
     },
 
-    // this is the fields for our User list
     fields: {
       name: text({
         validation: { isRequired: true }
@@ -30,7 +54,6 @@ export const lists = {
 
       email: text({
         validation: { isRequired: true },
-
         isIndexed: 'unique'
       }),
 
@@ -47,145 +70,199 @@ export const lists = {
     },
 
     hooks: {
-      resolveInput: ({ operation, resolvedData }) => {
+      resolveInput: ({ operation, resolvedData }: any) => {
         if (operation === 'create') {
-          resolvedData.createdAt = new Date()
-          return resolvedData
+          return {
+            ...resolvedData,
+            createdAt: new Date()
+          }
         }
+
         return resolvedData
       }
     }
   }),
 
   Author: list({
-    access: { operation: { query: allowAll, create: isAuth, update: isAuth, delete: isAuth } },
+    access: authAccess,
 
     fields: {
-      firstName: text({ validation: { isRequired: true } }),
-      lastName: text({ validation: { isRequired: true } }),
-      books: relationship({ ref: 'Book.author', many: true, access: { read: allowAll, create: isAuth, update: isAuth } }),
+      firstName: text({
+        validation: { isRequired: true }
+      }),
+
+      lastName: text({
+        validation: { isRequired: true }
+      }),
+
+      books: relationship({
+        ref: 'Book.author',
+        many: true
+      }),
+
       createdAt: timestamp(),
       updatedAt: timestamp(),
-      createdBy: relationship({ ref: 'User', many: false }),
-      updatedBy: relationship({ ref: 'User', many: false })
-    },
 
-    hooks: {
-      resolveInput: ({ operation, resolvedData, context }) => {
-        if (operation === 'create') {
-          resolvedData.createdAt = new Date()
-          resolvedData.createdBy = { connect: { id: context.session?.data.id } }
-          return resolvedData
-        }
-        if (operation === 'update') {
-          resolvedData.updatedAt = new Date()
-          resolvedData.updatedBy = { connect: { id: context.session?.data.id } }
-          return resolvedData
-        }
-        return resolvedData
-      }
-    }
-  }),
+      createdBy: relationship({
+        ref: 'User'
+      }),
 
-  Genre: list({
-    access: { operation: { query: allowAll, create: isAuth, update: isAuth, delete: isAuth } },
-
-    fields: {
-      name: text({ validation: { isRequired: true }, isIndexed: 'unique' }),
-      books: relationship({ ref: 'Book.genre', many: true, access: { read: allowAll, create: isAuth, update: isAuth } }),
-      createdAt: timestamp(),
-      updatedAt: timestamp(),
-      createdBy: relationship({ ref: 'User', many: false }),
-      updatedBy: relationship({ ref: 'User', many: false })
-    },
-
-    hooks: {
-      resolveInput: ({ operation, resolvedData, context }) => {
-        if (operation === 'create') {
-          resolvedData.createdAt = new Date()
-          resolvedData.createdBy = { connect: { id: context.session?.data.id } }
-          return resolvedData
-        }
-        if (operation === 'update') {
-          resolvedData.updatedAt = new Date()
-          resolvedData.updatedBy = { connect: { id: context.session?.data.id } }
-          return resolvedData
-        }
-        return resolvedData
-      }
-    }
-  }),
-
-  Book: list({
-    access: { operation: { query: allowAll, create: isAuth, update: isAuth, delete: isAuth } },
-
-    fields: {
-      title: text({ validation: { isRequired: true }, isIndexed: 'unique' }),
-      author: relationship({ ref: 'Author.books', many: false, access: { read: allowAll, create: isAuth, update: isAuth } }),
-      genre: relationship({ ref: 'Genre.books', many: true, access: { read: allowAll, create: isAuth, update: isAuth } }),
-      reviews: relationship({ ref: 'Review.book', many: true, access: { read: allowAll, create: isAuth, update: isAuth } }),
-      createdAt: timestamp(),
-      updatedAt: timestamp(),
-      createdBy: relationship({ ref: 'User', many: false }),
-      updatedBy: relationship({ ref: 'User', many: false })
-    },
-
-    hooks: {
-      resolveInput: ({ operation, resolvedData, context }) => {
-        if (operation === 'create') {
-          resolvedData.createdAt = new Date()
-          resolvedData.createdBy = { connect: { id: context.session?.data.id } }
-          return resolvedData
-        }
-        if (operation === 'update') {
-          resolvedData.updatedAt = new Date()
-          resolvedData.updatedBy = { connect: { id: context.session?.data.id } }
-          return resolvedData
-        }
-        return resolvedData
-      }
-    }
-  }),
-
-  Review: list({
-    access: {
-      operation: {
-        create: isAuth,
-        update: isAuth,
-        delete: isAuth,
-        query: allowAll
-      }
-    },
-
-    fields: {
-      user: relationship({ ref: 'User.reviews', many: false, access: { read: allowAll, create: isAuth, update: isAuth } }),
-      book: relationship({ ref: 'Book.reviews', many: false, access: { read: allowAll, create: isAuth, update: isAuth } }),
-      text: text(),
-      createdAt: timestamp(),
-      updatedAt: timestamp(),
-      createdBy: relationship({ ref: 'User', many: false }),
-      updatedBy: relationship({ ref: 'User', many: false }),
-      score: integer({
-        validation: { isRequired: true, min: 1, max: 5 }
+      updatedBy: relationship({
+        ref: 'User'
       })
     },
 
     hooks: {
-      resolveInput: ({ operation, resolvedData, context }) => {
-        if (operation === 'create') {
-          resolvedData.createdAt = new Date()
-          resolvedData.createdBy = { connect: { id: context.session?.data.id } }
-          return resolvedData
+      resolveInput: withTimestamps
+    }
+  }),
+
+  Genre: list({
+    access: authAccess,
+
+    fields: {
+      name: text({
+        validation: { isRequired: true },
+        isIndexed: 'unique'
+      }),
+
+      books: relationship({
+        ref: 'Book.genre',
+        many: true
+      }),
+
+      createdAt: timestamp(),
+      updatedAt: timestamp(),
+
+      createdBy: relationship({
+        ref: 'User'
+      }),
+
+      updatedBy: relationship({
+        ref: 'User'
+      })
+    },
+
+    hooks: {
+      resolveInput: withTimestamps
+    }
+  }),
+
+  Book: list({
+    access: authAccess,
+
+    fields: {
+      title: text({
+        validation: { isRequired: true },
+        isIndexed: 'unique'
+      }),
+
+      author: relationship({
+        ref: 'Author.books'
+      }),
+
+      genre: relationship({
+        ref: 'Genre.books',
+        many: true
+      }),
+
+      reviews: relationship({
+        ref: 'Review.book',
+        many: true
+      }),
+
+      createdAt: timestamp(),
+      updatedAt: timestamp(),
+
+      createdBy: relationship({
+        ref: 'User'
+      }),
+
+      updatedBy: relationship({
+        ref: 'User'
+      })
+    },
+
+    hooks: {
+      resolveInput: withTimestamps
+    }
+  }),
+
+  Review: list({
+    access: authAccess,
+
+    fields: {
+      user: relationship({
+        ref: 'User.reviews'
+      }),
+
+      book: relationship({
+        ref: 'Book.reviews'
+      }),
+
+      text: text(),
+
+      score: integer({
+        validation: {
+          isRequired: true,
+          min: 1,
+          max: 5
         }
-        if (operation === 'update') {
-          resolvedData.updatedAt = new Date()
-          resolvedData.updatedBy = { connect: { id: context.session?.data.id } }
-          return resolvedData
-        }
-        return resolvedData
+      }),
+
+      createdAt: timestamp(),
+      updatedAt: timestamp(),
+
+      createdBy: relationship({
+        ref: 'User'
+      }),
+
+      updatedBy: relationship({
+        ref: 'User'
+      })
+    },
+
+    db: {
+      extendPrismaSchema: (schema) => {
+        return schema.replace(
+          /}$/,
+          `
+    @@unique([userId, bookId])
+  }`
+        )
       }
     }
 
-    // НУЖНА ПРОВЕРКА НА ТО, ЧТО У ПОЛЬЗОВАТЕЛЯ МОЖЕТ БЫТЬ ТОЛЬКО ОДИН ОТЗЫВ НА ЭТУ КНИГУ
+    // hooks: {
+    //   resolveInput: withTimestamps,
+
+    //   validateInput: async ({ resolvedData, context, operation, item }) => {
+    //     if (operation !== 'create') return
+
+    //     const userId = resolvedData.user?.connect?.id
+    //     const bookId = resolvedData.book?.connect?.id
+
+    //     if (!userId || !bookId) return
+
+    //     const existingReview = await context.db.Review.findMany({
+    //       where: {
+    //         user: {
+    //           id: {
+    //             equals: userId
+    //           }
+    //         },
+    //         book: {
+    //           id: {
+    //             equals: bookId
+    //           }
+    //         }
+    //       }
+    //     })
+
+    //     if (existingReview.length > 0) {
+    //       throw new Error('Вы уже оставили отзыв на эту книгу')
+    //     }
+    //   }
+    // }
   })
 }
