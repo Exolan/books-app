@@ -18,12 +18,18 @@ type Documents = {
     "query GetBooks {\n  books {\n    id\n    title\n    author {\n      firstName\n      lastName\n    }\n    genre {\n      id\n      name\n    }\n    reviews {\n      score\n    }\n  }\n}": typeof types.GetBooksDocument,
     "query GetUser {\n  authenticatedItem {\n    ... on User {\n      id\n      email\n      name\n    }\n  }\n}": typeof types.GetUserDocument,
     "mutation SignOut {\n  endSession\n}": typeof types.SignOutDocument,
+    "mutation SignIn($email: String!, $password: String!) {\n  authenticateUserWithPassword(email: $email, password: $password) {\n    ... on UserAuthenticationWithPasswordSuccess {\n      sessionToken\n      item {\n        id\n        email\n        name\n      }\n    }\n    ... on UserAuthenticationWithPasswordFailure {\n      message\n    }\n  }\n}": typeof types.SignInDocument,
+    "mutation SignUp($email: String!, $name: String!, $password: String!) {\n  createUser(data: {email: $email, name: $name, password: $password}) {\n    ... on User {\n      id\n      email\n      name\n    }\n  }\n}": typeof types.SignUpDocument,
+    "mutation Mutation($data: ReviewCreateInput!) {\n  createReview(data: $data) {\n    text\n    score\n    user {\n      id\n    }\n  }\n}": typeof types.MutationDocument,
 };
 const documents: Documents = {
     "query GetBookById($id: ID!) {\n  book(where: {id: $id}) {\n    title\n    author {\n      firstName\n      lastName\n    }\n    genre {\n      id\n      name\n    }\n    reviews {\n      id\n      text\n      user {\n        id\n        name\n      }\n      score\n      createdAt\n    }\n  }\n}": types.GetBookByIdDocument,
     "query GetBooks {\n  books {\n    id\n    title\n    author {\n      firstName\n      lastName\n    }\n    genre {\n      id\n      name\n    }\n    reviews {\n      score\n    }\n  }\n}": types.GetBooksDocument,
     "query GetUser {\n  authenticatedItem {\n    ... on User {\n      id\n      email\n      name\n    }\n  }\n}": types.GetUserDocument,
     "mutation SignOut {\n  endSession\n}": types.SignOutDocument,
+    "mutation SignIn($email: String!, $password: String!) {\n  authenticateUserWithPassword(email: $email, password: $password) {\n    ... on UserAuthenticationWithPasswordSuccess {\n      sessionToken\n      item {\n        id\n        email\n        name\n      }\n    }\n    ... on UserAuthenticationWithPasswordFailure {\n      message\n    }\n  }\n}": types.SignInDocument,
+    "mutation SignUp($email: String!, $name: String!, $password: String!) {\n  createUser(data: {email: $email, name: $name, password: $password}) {\n    ... on User {\n      id\n      email\n      name\n    }\n  }\n}": types.SignUpDocument,
+    "mutation Mutation($data: ReviewCreateInput!) {\n  createReview(data: $data) {\n    text\n    score\n    user {\n      id\n    }\n  }\n}": types.MutationDocument,
 };
 
 /**
@@ -56,6 +62,18 @@ export function gql(source: "query GetUser {\n  authenticatedItem {\n    ... on 
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "mutation SignOut {\n  endSession\n}"): (typeof documents)["mutation SignOut {\n  endSession\n}"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "mutation SignIn($email: String!, $password: String!) {\n  authenticateUserWithPassword(email: $email, password: $password) {\n    ... on UserAuthenticationWithPasswordSuccess {\n      sessionToken\n      item {\n        id\n        email\n        name\n      }\n    }\n    ... on UserAuthenticationWithPasswordFailure {\n      message\n    }\n  }\n}"): (typeof documents)["mutation SignIn($email: String!, $password: String!) {\n  authenticateUserWithPassword(email: $email, password: $password) {\n    ... on UserAuthenticationWithPasswordSuccess {\n      sessionToken\n      item {\n        id\n        email\n        name\n      }\n    }\n    ... on UserAuthenticationWithPasswordFailure {\n      message\n    }\n  }\n}"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "mutation SignUp($email: String!, $name: String!, $password: String!) {\n  createUser(data: {email: $email, name: $name, password: $password}) {\n    ... on User {\n      id\n      email\n      name\n    }\n  }\n}"): (typeof documents)["mutation SignUp($email: String!, $name: String!, $password: String!) {\n  createUser(data: {email: $email, name: $name, password: $password}) {\n    ... on User {\n      id\n      email\n      name\n    }\n  }\n}"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "mutation Mutation($data: ReviewCreateInput!) {\n  createReview(data: $data) {\n    text\n    score\n    user {\n      id\n    }\n  }\n}"): (typeof documents)["mutation Mutation($data: ReviewCreateInput!) {\n  createReview(data: $data) {\n    text\n    score\n    user {\n      id\n    }\n  }\n}"];
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {};

@@ -10,7 +10,7 @@ export default function SignInForm() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const formData = new FormData(event.currentTarget)
-    const email = formData.get('email') as string
+    const email = formData.get('email') as string // Захардкожено
     const password = formData.get('password') as string
 
     signIn({ variables: { email, password } })
