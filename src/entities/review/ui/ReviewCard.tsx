@@ -5,9 +5,9 @@ export function ReviewCard({ review }: { review: Review }) {
     <div key={review.id} style={{ border: '1px solid #ccc', borderRadius: '8px', padding: '8px', marginBottom: '8px' }}>
       <p>{review.text}</p>
       <p>
-        Оценка: {review.score} - <em>{review.user.name}</em>
+        Оценка: {review.score ?? 0} - <em>{review.user?.name}</em>
       </p>
-      <p>Дата: {new Date(review.createdAt).toLocaleDateString()}</p>
+      <p>Дата: {review.createdAt ? new Date(review.createdAt).toLocaleDateString() : '-'}</p>
     </div>
   )
 }

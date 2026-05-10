@@ -1,11 +1,10 @@
 import { useState } from 'react'
-import Button from '../../../shared/ui/Button'
-import { useAuth } from '../../user/model/useAuth'
-import { useBook } from '../model/useBook'
-import MyModal from '../../../shared/ui/Modal'
-import CreateReviewForm from '../../../features/review/createReview/ui/CreateReviewForm'
-import { Review } from '../../review/types/review'
-import ReviewCard from '../../review'
+import Button from 'src/shared/ui/Button'
+import { useAuth } from 'src/entities/user'
+import { useBook } from '../model'
+import MyModal from 'src/shared/ui/Modal'
+import CreateReviewForm from 'src/features/review/createReview/ui/CreateReviewForm'
+import { ReviewCard } from 'src/entities/review'
 
 export function BookInfo({ bookId }: { bookId: string }) {
   const { book, loading, error } = useBook(bookId)
@@ -23,7 +22,7 @@ export function BookInfo({ bookId }: { bookId: string }) {
   console.log('User id:', user?.id)
   console.log('reviews:', book.reviews)
 
-  const hasReview = book.reviews.some((review: Review) => review.user.id === user?.id)
+  const hasReview = book.reviews?.some((review) => review.user?.id === user?.id)
 
   return (
     <div>
@@ -33,24 +32,18 @@ export function BookInfo({ bookId }: { bookId: string }) {
 
       <h1>{book.title}</h1>
       <h2>
-        {book.author.firstName} {book.author.lastName}
+        {book.author?.firstName} {book.author?.lastName}
       </h2>
       <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
         <h4>Жанр:</h4>
-        <div style={{ display: 'flex', gap: '8px' }}>
-          {book.genre.map((genre: { id: string; name: string }) => (
-            <span key={genre.id}>{genre.name}</span>
-          ))}
-        </div>
+        <div style={{ display: 'flex', gap: '8px' }}>{book.genre?.map((genre) => <span key={genre.id}>{genre.name}</span>)}</div>
       </div>
       <div>
         <h4>Описание</h4>
       </div>
       <div>
         <h4>Отзывы</h4>
-        {book.reviews.map((review: Review) => (
-          <ReviewCard key={review.id} review={review} />
-        ))}
+        {book.reviews?.map((review) => <ReviewCard key={review.id} review={review} />)}
       </div>
       {user && !hasReview && (
         <div style={{ marginTop: '16px' }}>

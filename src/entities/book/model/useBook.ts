@@ -1,9 +1,8 @@
 import { useQuery } from '@apollo/client'
-import { GET_BOOK_BY_ID } from '../api/'
-import { GetBookByIdResponse, UseBookResult } from '../types/book'
+import { GetBookByIdDocument } from 'src/shared/api/generated/graphql'
 
-export function useBook(bookId: string): UseBookResult {
-  const { data, loading, error } = useQuery<GetBookByIdResponse>(GET_BOOK_BY_ID, {
+export function useBook(bookId: string) {
+  const { data, loading, error } = useQuery(GetBookByIdDocument, {
     variables: { id: bookId }
   })
 

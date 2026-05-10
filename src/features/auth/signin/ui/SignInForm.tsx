@@ -1,7 +1,7 @@
 import { useRouter } from 'next/navigation'
 import { useSignIn } from '../model/useSignIn'
-import Button from '../../../../shared/ui/Button'
-import Input from '../../../../shared/ui/Input'
+import Button from 'src/shared/ui/Button'
+import Input from 'src/shared/ui/Input'
 
 export default function SignInForm() {
   const { push } = useRouter()

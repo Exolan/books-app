@@ -1,8 +1,8 @@
 import { useMutation } from '@apollo/client'
-import { CREATE_REVIEW } from '../api/createReview'
+import { MutationDocument } from 'src/shared/api/generated/graphql'
 
 export default function useCreateReview() {
-  const [createReview, { data, loading, error }] = useMutation(CREATE_REVIEW, {
+  const [createReview, { data, loading, error }] = useMutation(MutationDocument, {
     onError: (error) => {
       console.error('Ошибка создания отзыва:', error)
     }

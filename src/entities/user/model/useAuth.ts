@@ -1,12 +1,11 @@
 import { useQuery } from '@apollo/client'
-import { GET_USER } from '../api'
-import { UseAuthResponce, UseAuthResult } from '../types/user'
+import { GetUserDocument } from 'src/shared/api/generated/graphql'
 
-export function useAuth(): UseAuthResult {
-  const { data, loading, error } = useQuery<UseAuthResponce>(GET_USER, { fetchPolicy: 'cache-and-network' }) // Убрать политику?
+export function useAuth() {
+  const { data, loading, error } = useQuery(GetUserDocument)
 
   return {
-    user: data?.authenticatedItem ?? null,
+    user: data?.authenticatedItem,
     userLoading: loading,
     userError: error
   }

@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
-import Header from '../../widgets/header/ui/Header'
-import BookInfo from '../../entities/book/ui/BookInfo'
+import Header from 'src/widgets/header'
+import { BookInfo } from 'src/entities/book'
 
 export default function BookPage() {
   const router = useRouter()
