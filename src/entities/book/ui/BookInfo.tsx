@@ -19,9 +19,6 @@ export function BookInfo({ bookId }: { bookId: string }) {
   if (error) return <p>Ошибка загрузки книги: {error.message}</p>
   if (!book) return <p>Книга не найдена</p>
 
-  console.log('User id:', user?.id)
-  console.log('reviews:', book.reviews)
-
   const hasReview = book.reviews?.some((review) => review.user?.id === user?.id)
 
   return (

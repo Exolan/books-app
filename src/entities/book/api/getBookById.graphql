@@ -1,0 +1,23 @@
+query GetBookById($id: ID!) {
+    book(where: { id: $id }) {
+      title
+      author {
+        firstName
+        lastName
+      }
+      genre {
+        id
+        name
+      }
+      reviews {
+        id
+        text
+        user {
+          id
+          name
+        }
+        score
+        createdAt
+      }
+    }
+  }
