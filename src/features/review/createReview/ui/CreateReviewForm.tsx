@@ -1,10 +1,10 @@
 import { Rating, TextareaAutosize } from '@mui/material'
 import Button from 'src/shared/ui/Button'
-import useCreateReview from '../model/useCreateReview'
+import { useCreateReview } from '../model/useCreateReview'
 import { useAuth } from 'src/entities/user'
 import { useRouter } from 'next/navigation'
 
-export default function CreateReviewForm({ bookId, onClose }: { bookId: string; onClose: () => void }) {
+export function CreateReviewForm({ bookId, onClose }: { bookId: string; onClose: () => void }) {
   const { user } = useAuth()
   const { refresh } = useRouter()
   const { createReview, loading } = useCreateReview()

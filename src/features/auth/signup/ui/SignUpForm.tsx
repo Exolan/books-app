@@ -1,9 +1,9 @@
 import { useRouter } from 'next/navigation'
-import Button from '../../../../shared/ui/Button'
-import Input from '../../../../shared/ui/Input'
+import Button from 'src/shared/ui/Button'
+import Input from 'src/shared/ui/Input'
 import { useSignUp } from '../model/useSignUp'
 
-export default function SignUpForm() {
+export function SignUpForm() {
   const { signUp, loading, error } = useSignUp()
   const { push } = useRouter()
 
@@ -17,8 +17,8 @@ export default function SignUpForm() {
     signUp({ variables: { email, password, name } })
   }
 
-  if (loading) return <p>Loading...</p>
-  if (error) return <p>Error: {error.message}</p>
+  if (loading) return <p>Загрузка...</p>
+  if (error) return <p>Ошибка: {error.message}</p>
 
   return (
     <div>

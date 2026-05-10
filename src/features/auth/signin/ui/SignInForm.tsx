@@ -3,7 +3,7 @@ import { useSignIn } from '../model/useSignIn'
 import Button from 'src/shared/ui/Button'
 import Input from 'src/shared/ui/Input'
 
-export default function SignInForm() {
+export function SignInForm() {
   const { push } = useRouter()
   const { signIn } = useSignIn()
 
