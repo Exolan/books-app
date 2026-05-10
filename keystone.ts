@@ -34,6 +34,7 @@ export default withAuth(
     lists,
     session,
     graphql: {
+      // Расширяем GraphQL-схему для добавления кастомного запроса averageScore
       extendGraphqlSchema: (schema: GraphQLSchema) => {
         return mergeSchemas({
           schemas: [schema],
@@ -43,6 +44,7 @@ export default withAuth(
   }
           `,
           resolvers: {
+            // Резолвер, который вычисляет среднюю оценку для книги по её ID
             Query: {
               averageScore: async (_, { bookId }, context) => {
                 const result = await context.prisma.review.aggregate({

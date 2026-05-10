@@ -2,8 +2,9 @@ import { list } from '@keystone-6/core'
 import { allowAll } from '@keystone-6/core/access'
 import { text, password, relationship, timestamp, integer } from '@keystone-6/core/fields'
 
-const isAuth = ({ session }: any) => !!session
+const isAuth = ({ session }: any) => !!session // Проверяем, что пользователь аутентифицирован
 
+// Общая конфигурация доступа для списков Author, Genre, Book и Review
 const authAccess = {
   operation: {
     query: allowAll,
@@ -13,9 +14,11 @@ const authAccess = {
   }
 }
 
+// Хук для автоматического заполнения tracking-полей
 const withTimestamps = ({ operation, resolvedData, context }: any) => {
   const userId = context.session?.data.id
 
+  // При создании
   if (operation === 'create') {
     return {
       ...resolvedData,
@@ -24,6 +27,7 @@ const withTimestamps = ({ operation, resolvedData, context }: any) => {
     }
   }
 
+  // При обновлении
   if (operation === 'update') {
     return {
       ...resolvedData,
@@ -38,6 +42,7 @@ const withTimestamps = ({ operation, resolvedData, context }: any) => {
 export const lists = {
   User: list({
     access: {
+      // Разрешаем всем просматривать пользователей, регистрироваться, но обновлять и удалять только аутентифицированным пользователям
       operation: {
         query: allowAll,
         create: allowAll,
@@ -47,38 +52,41 @@ export const lists = {
     },
 
     fields: {
+      // Имя
       name: text({
         validation: { isRequired: true }
       }),
 
+      // Электронная почта
       email: text({
         validation: { isRequired: true },
         isIndexed: 'unique'
       }),
 
+      // Пароль
       password: password({
         validation: { isRequired: true }
       }),
 
+      // Отзывы
       reviews: relationship({
         ref: 'Review.user',
         many: true
       }),
 
-      createdAt: timestamp()
+      // tracking-поля
+      createdAt: timestamp(),
+      updatedAt: timestamp(),
+      createdBy: relationship({
+        ref: 'User'
+      }),
+      updatedBy: relationship({
+        ref: 'User'
+      })
     },
 
     hooks: {
-      resolveInput: ({ operation, resolvedData }: any) => {
-        if (operation === 'create') {
-          return {
-            ...resolvedData,
-            createdAt: new Date()
-          }
-        }
-
-        return resolvedData
-      }
+      resolveInput: withTimestamps
     }
   }),
 
@@ -86,26 +94,28 @@ export const lists = {
     access: authAccess,
 
     fields: {
+      // Имя
       firstName: text({
         validation: { isRequired: true }
       }),
 
+      // Фамилия
       lastName: text({
         validation: { isRequired: true }
       }),
 
+      // Книги автора
       books: relationship({
         ref: 'Book.author',
         many: true
       }),
 
+      // tracking-поля
       createdAt: timestamp(),
       updatedAt: timestamp(),
-
       createdBy: relationship({
         ref: 'User'
       }),
-
       updatedBy: relationship({
         ref: 'User'
       })
@@ -120,23 +130,24 @@ export const lists = {
     access: authAccess,
 
     fields: {
+      // Название жанра
       name: text({
         validation: { isRequired: true },
         isIndexed: 'unique'
       }),
 
+      // Книги
       books: relationship({
         ref: 'Book.genre',
         many: true
       }),
 
+      // tracking-поля
       createdAt: timestamp(),
       updatedAt: timestamp(),
-
       createdBy: relationship({
         ref: 'User'
       }),
-
       updatedBy: relationship({
         ref: 'User'
       })
@@ -151,32 +162,47 @@ export const lists = {
     access: authAccess,
 
     fields: {
+      // Название
       title: text({
-        validation: { isRequired: true },
-        isIndexed: 'unique'
+        validation: {
+          isRequired: true,
+          length: { min: 2, max: 200 } // Небольшая валидация
+        }
       }),
 
+      // Автор
       author: relationship({
-        ref: 'Author.books'
+        ref: 'Author.books',
+        // Отображение имени в админке
+        ui: {
+          displayMode: 'select',
+          labelField: 'firstName'
+        }
       }),
 
+      // Жанры (может быть несколько?)
       genre: relationship({
         ref: 'Genre.books',
         many: true
       }),
 
+      // Описание
+      description: text({
+        validation: { isRequired: true }
+      }),
+
+      // Отзывы
       reviews: relationship({
         ref: 'Review.book',
         many: true
       }),
 
+      // tracking-поля
       createdAt: timestamp(),
       updatedAt: timestamp(),
-
       createdBy: relationship({
         ref: 'User'
       }),
-
       updatedBy: relationship({
         ref: 'User'
       })
@@ -185,6 +211,7 @@ export const lists = {
     hooks: {
       resolveInput: withTimestamps,
 
+      // Валидация при создании на пустые поля author и genre
       validateInput: async ({ resolvedData, addValidationError, operation }) => {
         if (operation === 'create') {
           // Проверяем наличие автора
@@ -207,18 +234,22 @@ export const lists = {
     access: authAccess,
 
     fields: {
+      // Пользователь, который оставил отзыв
       user: relationship({
         ref: 'User.reviews'
       }),
 
+      // Книга, на которую оставлен отзыв
       book: relationship({
         ref: 'Book.reviews'
       }),
 
+      // Текст отзыва
       text: text({
         validation: { isRequired: true }
       }),
 
+      // Оценка от 1 до 5
       score: integer({
         validation: {
           isRequired: true,
@@ -227,13 +258,12 @@ export const lists = {
         }
       }),
 
+      // tracking-поля
       createdAt: timestamp(),
       updatedAt: timestamp(),
-
       createdBy: relationship({
         ref: 'User'
       }),
-
       updatedBy: relationship({
         ref: 'User'
       })
@@ -242,6 +272,7 @@ export const lists = {
     hooks: {
       resolveInput: withTimestamps,
 
+      // Валидация при создании на пустые поля user и book
       validateInput: async ({ resolvedData, addValidationError, operation }) => {
         if (operation === 'create') {
           // Проверяем наличие автора
@@ -259,17 +290,19 @@ export const lists = {
       }
     },
 
+    // Добавление уникальных индексов на поля userId и bookId, чтобы пользователь не мог оставить несколько отзывов на одну книгу
     db: {
       extendPrismaSchema: (schema) => {
         return schema.replace(
           /}$/,
           `
-    @@unique([userId, bookId])
-  }`
+            @@unique([userId, bookId])
+          }`
         )
       }
     }
 
+    // Попытка это сделать через хуки
     // hooks: {
     //   resolveInput: withTimestamps,
 
