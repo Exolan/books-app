@@ -1,7 +1,6 @@
 import { list } from '@keystone-6/core'
 import { allowAll } from '@keystone-6/core/access'
 import { text, password, relationship, timestamp, integer } from '@keystone-6/core/fields'
-import { GraphQLSchema } from 'graphql'
 
 const isAuth = ({ session }: any) => !!session
 
@@ -184,7 +183,23 @@ export const lists = {
     },
 
     hooks: {
-      resolveInput: withTimestamps
+      resolveInput: withTimestamps,
+
+      validateInput: async ({ resolvedData, addValidationError, operation }) => {
+        if (operation === 'create') {
+          // Проверяем наличие автора
+          const hasAuthor = resolvedData.author
+          if (!hasAuthor) {
+            addValidationError('Невозможно создать книгу без автора.')
+          }
+
+          // Проверяем наличие хотя бы одного жанра
+          const hasGenre = resolvedData.genre
+          if (!hasGenre) {
+            addValidationError('Невозможно создать книгу без жанра.')
+          }
+        }
+      }
     }
   }),
 
@@ -200,7 +215,9 @@ export const lists = {
         ref: 'Book.reviews'
       }),
 
-      text: text(),
+      text: text({
+        validation: { isRequired: true }
+      }),
 
       score: integer({
         validation: {
@@ -220,6 +237,26 @@ export const lists = {
       updatedBy: relationship({
         ref: 'User'
       })
+    },
+
+    hooks: {
+      resolveInput: withTimestamps,
+
+      validateInput: async ({ resolvedData, addValidationError, operation }) => {
+        if (operation === 'create') {
+          // Проверяем наличие автора
+          const hasUser = resolvedData.user
+          if (!hasUser) {
+            addValidationError('Невозможно создать отзыв без пользователя')
+          }
+
+          // Проверяем наличие хотя бы одного жанра
+          const hasBook = resolvedData.book
+          if (!hasBook) {
+            addValidationError('Невозможно создать отзыв без книги')
+          }
+        }
+      }
     },
 
     db: {
