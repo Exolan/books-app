@@ -5,7 +5,7 @@ import { SignUpDocument } from 'src/shared/api/generated/graphql'
 export function useSignUp() {
   const { replace } = useRouter()
 
-  const [signUp, { data, loading }] = useMutation(SignUpDocument, {
+  const [signUp, { loading }] = useMutation(SignUpDocument, {
     onCompleted: (result) => {
       if (result?.createUser?.id) {
         replace('/auth/signin')
