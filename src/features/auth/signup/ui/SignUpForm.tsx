@@ -2,7 +2,6 @@ import { useRouter } from 'next/navigation'
 import Button from 'src/shared/ui/Button'
 import Input from 'src/shared/ui/Input'
 import { useSignUp } from '../model/useSignUp'
-import { ApolloError } from '@apollo/client'
 
 export function SignUpForm() {
   const { signUp, loading } = useSignUp()
