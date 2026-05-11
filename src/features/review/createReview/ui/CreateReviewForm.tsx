@@ -1,3 +1,5 @@
+'use client'
+
 import { Rating, TextareaAutosize } from '@mui/material'
 import Button from 'src/shared/ui/Button'
 import { useCreateReview } from '../model/useCreateReview'

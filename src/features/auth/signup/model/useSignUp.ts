@@ -1,3 +1,5 @@
+'use client'
+
 import { useMutation } from '@apollo/client'
 import { useRouter } from 'next/navigation'
 import { SignUpDocument } from 'src/shared/api/generated/graphql'

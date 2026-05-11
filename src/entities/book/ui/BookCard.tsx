@@ -1,3 +1,5 @@
+'use client'
+
 import { useRouter } from 'next/navigation'
 import { Book } from '../types/book'
 import { routes } from 'src/shared/routes'

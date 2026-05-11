@@ -1,3 +1,5 @@
+'use client'
+
 import Button from 'src/shared/ui/Button'
 import { useAuth } from 'src/entities/user'
 import { useSignOut } from 'src/entities/user'

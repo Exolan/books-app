@@ -1,3 +1,5 @@
+'use client'
+
 import { useMutation } from '@apollo/client'
 import { MutationDocument } from 'src/shared/api/generated/graphql'
 

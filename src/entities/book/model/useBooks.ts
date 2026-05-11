@@ -1,3 +1,5 @@
+'use client'
+
 import { useQuery } from '@apollo/client'
 import { GetBooksDocument } from 'src/shared/api/generated/graphql'
 

@@ -1,3 +1,5 @@
+'use client'
+
 import { useRouter } from 'next/navigation'
 import Button from 'src/shared/ui/Button'
 import Input from 'src/shared/ui/Input'

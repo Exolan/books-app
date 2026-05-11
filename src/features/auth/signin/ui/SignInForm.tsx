@@ -1,3 +1,5 @@
+'use client'
+
 import { useRouter } from 'next/navigation'
 import { useSignIn } from '../model/useSignIn'
 import Button from 'src/shared/ui/Button'
