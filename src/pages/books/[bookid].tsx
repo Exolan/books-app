@@ -13,7 +13,7 @@ export default function BookPage() {
   const [isModal, setIsModal] = useState(false)
   const { bookid } = router.query
   const isValidId = typeof bookid === 'string' // Проверка, что это id
-  const { book, loading, error } = useBook(isValidId ? bookid : '', { skip: !isValidId })
+  const { book, loading, error, refetch } = useBook(isValidId ? bookid : '', { skip: !isValidId })
   const { user } = useAuth()
 
   const handleModal = () => setIsModal((prev) => !prev)
@@ -26,14 +26,20 @@ export default function BookPage() {
   if (error) return <p>Ошибка: {error.message}</p>
   if (!book) return <p>Книга не найдена</p>
 
-  const hasReview = book.reviews?.some((r) => r.user?.id === user?.id) ?? false
+  const hasReview = user && book.reviews?.some((r) => r.user?.id === user.id) // Проверяем, оставил ли текущий пользователь отзыв
 
   return (
     <>
       <Header />
 
       <MyModal isOpen={isModal} closeModal={handleModal}>
-        <CreateReviewForm bookId={bookid} onClose={handleModal} />
+        <CreateReviewForm
+          bookId={bookid}
+          onClose={() => {
+            handleModal()
+            refetch()
+          }}
+        />
       </MyModal>
 
       <div>

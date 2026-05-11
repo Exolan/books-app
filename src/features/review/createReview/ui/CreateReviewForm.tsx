@@ -7,7 +7,6 @@ import { useRouter } from 'next/navigation'
 export function CreateReviewForm({ bookId, onClose }: { bookId: string; onClose: () => void }) {
   const { user } = useAuth()
   const { createReview, loading } = useCreateReview()
-  const { refresh } = useRouter()
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -41,7 +40,6 @@ export function CreateReviewForm({ bookId, onClose }: { bookId: string; onClose:
     })
 
     onClose()
-    refresh()
   }
 
   return (
