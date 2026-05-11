@@ -1,19 +1,28 @@
 import { useRouter } from 'next/navigation'
 import { useSignIn } from '../model/useSignIn'
-import Button from '../../../../shared/ui/Button'
-import Input from '../../../../shared/ui/Input'
+import Button from 'src/shared/ui/Button'
+import Input from 'src/shared/ui/Input'
 
-export default function SignInForm() {
+export function SignInForm() {
   const { push } = useRouter()
-  const { signIn } = useSignIn()
+  const { signIn, loading } = useSignIn()
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const formData = new FormData(event.currentTarget)
-    const email = formData.get('email') as string
-    const password = formData.get('password') as string
+    const email = formData.get('email')
+    const password = formData.get('password')
 
-    signIn({ variables: { email, password } })
+    if (typeof email !== 'string' || !email) {
+      alert('Введите корректный email')
+      return
+    }
+    if (typeof password !== 'string' || !password) {
+      alert('Введите пароль')
+      return
+    }
+
+    await signIn({ variables: { email, password } })
   }
 
   return (
@@ -25,7 +34,9 @@ export default function SignInForm() {
           <Input label='Password' type='password' name='password' required />
         </div>
         <div style={{ marginTop: '1rem', display: 'flex', justifyContent: 'space-between' }}>
-          <Button type='submit'>Войти</Button>
+          <Button type='submit' disabled={loading}>
+            {loading ? 'Вход...' : 'Войти'}
+          </Button>
           <Button type='button' onClick={() => push('/auth/signup')}>
             Зарегистрироваться
           </Button>

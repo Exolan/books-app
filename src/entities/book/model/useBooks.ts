@@ -1,9 +1,8 @@
 import { useQuery } from '@apollo/client'
-import { GET_BOOKS } from '../api/'
-import { GetBooksResponse, UseBooksResult } from '../types/book'
+import { GetBooksDocument } from 'src/shared/api/generated/graphql'
 
-export function useBooks(): UseBooksResult {
-  const { data, loading, error } = useQuery<GetBooksResponse>(GET_BOOKS)
+export function useBooks() {
+  const { data, loading, error } = useQuery(GetBooksDocument, { fetchPolicy: 'cache-and-network' })
 
   return {
     books: data?.books ?? [],

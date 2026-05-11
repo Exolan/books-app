@@ -1,6 +1,6 @@
-import Button from '../../../shared/ui/Button'
-import { useAuth } from '../../../entities/user/model/useAuth'
-import useSignOut from '../../../entities/user/model/useSignOut'
+import Button from 'src/shared/ui/Button'
+import { useAuth } from 'src/entities/user'
+import { useSignOut } from 'src/entities/user'
 import { useRouter } from 'next/navigation'
 
 export default function Header() {
@@ -13,7 +13,7 @@ export default function Header() {
     refresh()
   }
 
-  if (userLoading) return <p>Loading...</p>
+  if (userLoading) return <p>Загрузка...</p>
 
   return (
     <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem' }}>

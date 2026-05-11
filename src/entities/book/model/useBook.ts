@@ -1,15 +1,17 @@
 import { useQuery } from '@apollo/client'
-import { GET_BOOK_BY_ID } from '../api/'
-import { GetBookByIdResponse, UseBookResult } from '../types/book'
+import { GetBookByIdDocument } from 'src/shared/api/generated/graphql'
 
-export function useBook(bookId: string): UseBookResult {
-  const { data, loading, error } = useQuery<GetBookByIdResponse>(GET_BOOK_BY_ID, {
-    variables: { id: bookId }
+export function useBook(bookId: string, options?: { skip?: boolean }) {
+  const { data, loading, error, refetch } = useQuery(GetBookByIdDocument, {
+    variables: { id: bookId },
+    skip: !bookId || options?.skip, // Не делать запрос
+    fetchPolicy: 'cache-and-network'
   })
 
   return {
     book: data?.book ?? null, // Явно, чтобы не было undefined
     loading,
-    error
+    error,
+    refetch
   }
 }

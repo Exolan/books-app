@@ -9,6 +9,9 @@ type User {
   reviews(where: ReviewWhereInput! = {}, orderBy: [ReviewOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ReviewWhereUniqueInput): [Review!]
   reviewsCount(where: ReviewWhereInput! = {}): Int
   createdAt: DateTime
+  updatedAt: DateTime
+  createdBy: User
+  updatedBy: User
 }
 
 type PasswordState {
@@ -31,6 +34,9 @@ input UserWhereInput {
   email: StringFilter
   reviews: ReviewManyRelationFilter
   createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+  createdBy: UserWhereInput
+  updatedBy: UserWhereInput
 }
 
 input IDFilter {
@@ -100,6 +106,7 @@ input UserOrderByInput {
   name: OrderDirection
   email: OrderDirection
   createdAt: OrderDirection
+  updatedAt: OrderDirection
 }
 
 enum OrderDirection {
@@ -113,6 +120,9 @@ input UserUpdateInput {
   password: String
   reviews: ReviewRelateToManyForUpdateInput
   createdAt: DateTime
+  updatedAt: DateTime
+  createdBy: UserRelateToOneForUpdateInput
+  updatedBy: UserRelateToOneForUpdateInput
 }
 
 input ReviewRelateToManyForUpdateInput {
@@ -120,6 +130,12 @@ input ReviewRelateToManyForUpdateInput {
   set: [ReviewWhereUniqueInput!]
   create: [ReviewCreateInput!]
   connect: [ReviewWhereUniqueInput!]
+}
+
+input UserRelateToOneForUpdateInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
+  disconnect: Boolean
 }
 
 input UserUpdateArgs {
@@ -133,11 +149,19 @@ input UserCreateInput {
   password: String
   reviews: ReviewRelateToManyForCreateInput
   createdAt: DateTime
+  updatedAt: DateTime
+  createdBy: UserRelateToOneForCreateInput
+  updatedBy: UserRelateToOneForCreateInput
 }
 
 input ReviewRelateToManyForCreateInput {
   create: [ReviewCreateInput!]
   connect: [ReviewWhereUniqueInput!]
+}
+
+input UserRelateToOneForCreateInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
 }
 
 type Author {
@@ -201,12 +225,6 @@ input BookRelateToManyForUpdateInput {
   connect: [BookWhereUniqueInput!]
 }
 
-input UserRelateToOneForUpdateInput {
-  create: UserCreateInput
-  connect: UserWhereUniqueInput
-  disconnect: Boolean
-}
-
 input AuthorUpdateArgs {
   where: AuthorWhereUniqueInput!
   data: AuthorUpdateInput!
@@ -225,11 +243,6 @@ input AuthorCreateInput {
 input BookRelateToManyForCreateInput {
   create: [BookCreateInput!]
   connect: [BookWhereUniqueInput!]
-}
-
-input UserRelateToOneForCreateInput {
-  create: UserCreateInput
-  connect: UserWhereUniqueInput
 }
 
 type Genre {
@@ -297,6 +310,7 @@ type Book {
   author: Author
   genre(where: GenreWhereInput! = {}, orderBy: [GenreOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: GenreWhereUniqueInput): [Genre!]
   genreCount(where: GenreWhereInput! = {}): Int
+  description: String
   reviews(where: ReviewWhereInput! = {}, orderBy: [ReviewOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ReviewWhereUniqueInput): [Review!]
   reviewsCount(where: ReviewWhereInput! = {}): Int
   createdAt: DateTime
@@ -307,7 +321,6 @@ type Book {
 
 input BookWhereUniqueInput {
   id: ID
-  title: String
 }
 
 input BookWhereInput {
@@ -318,6 +331,7 @@ input BookWhereInput {
   title: StringFilter
   author: AuthorWhereInput
   genre: GenreManyRelationFilter
+  description: StringFilter
   reviews: ReviewManyRelationFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
@@ -334,6 +348,7 @@ input GenreManyRelationFilter {
 input BookOrderByInput {
   id: OrderDirection
   title: OrderDirection
+  description: OrderDirection
   createdAt: OrderDirection
   updatedAt: OrderDirection
 }
@@ -342,6 +357,7 @@ input BookUpdateInput {
   title: String
   author: AuthorRelateToOneForUpdateInput
   genre: GenreRelateToManyForUpdateInput
+  description: String
   reviews: ReviewRelateToManyForUpdateInput
   createdAt: DateTime
   updatedAt: DateTime
@@ -371,6 +387,7 @@ input BookCreateInput {
   title: String
   author: AuthorRelateToOneForCreateInput
   genre: GenreRelateToManyForCreateInput
+  description: String
   reviews: ReviewRelateToManyForCreateInput
   createdAt: DateTime
   updatedAt: DateTime
@@ -568,24 +585,25 @@ type KeystoneAdminMeta {
 
 type KeystoneAdminUIListMeta {
   key: String!
-  itemQueryName: String!
-  listQueryName: String!
-  hideCreate: Boolean!
-  hideDelete: Boolean!
   path: String!
   label: String!
   singular: String!
   plural: String!
   description: String
-  initialColumns: [String!]!
   pageSize: Int!
   labelField: String!
   fields: [KeystoneAdminUIFieldMeta!]!
   groups: [KeystoneAdminUIFieldGroupMeta!]!
   graphql: KeystoneAdminUIGraphQL!
+  initialColumns: [String!]!
+  initialSearchFields: [String!]!
   initialSort: KeystoneAdminUISort
-  isHidden: Boolean!
   isSingleton: Boolean!
+  hideCreate: Boolean!
+  hideDelete: Boolean!
+  isHidden: Boolean!
+  itemQueryName: String!
+  listQueryName: String!
 }
 
 type KeystoneAdminUIFieldMeta {

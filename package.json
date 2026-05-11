@@ -10,8 +10,12 @@
     "keystone:start": "keystone start",
     "next:dev": "next dev -p 4000",
     "next:build": "next build",
+    "next:start": "next start",
     "build": "keystone build --no-ui && next build",
-    "postinstall": "keystone postinstall"
+    "postinstall": "keystone postinstall",
+    "codegen": "graphql-codegen --config codegen.ts",
+    "codegen:watch": "graphql-codegen --config codegen.ts --watch"
+    
   },
   "dependencies": {
     "@apollo/client": "^3.12.2",
@@ -31,6 +35,8 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^9.3.0",
+    "@graphql-codegen/cli": "^7.0.0",
+    "@graphql-codegen/client-preset": "^6.0.0",
     "@jest/globals": "^29.7.0",
     "@types/node": "^20.14.10",
     "@types/react-dom": "^18.3.0",
@@ -48,5 +54,8 @@
     "prisma": "5.19.0",
     "react": "^18.3.1",
     "typescript": "^5.5.0"
+  },
+  "overrides": {
+    "graphql-ws": "^5.16.2"
   }
 }

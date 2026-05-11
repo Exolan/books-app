@@ -1,24 +1,34 @@
 import { useRouter } from 'next/navigation'
-import Button from '../../../../shared/ui/Button'
-import Input from '../../../../shared/ui/Input'
+import Button from 'src/shared/ui/Button'
+import Input from 'src/shared/ui/Input'
 import { useSignUp } from '../model/useSignUp'
 
-export default function SignUpForm() {
-  const { signUp, loading, error } = useSignUp()
+export function SignUpForm() {
+  const { signUp, loading } = useSignUp()
   const { push } = useRouter()
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const formData = new FormData(event.currentTarget)
-    const email = formData.get('email') as string
-    const password = formData.get('password') as string
-    const name = formData.get('name') as string
+    const email = formData.get('email')
+    const password = formData.get('password')
+    const name = formData.get('name')
 
-    signUp({ variables: { email, password, name } })
+    if (typeof email !== 'string' || !email) {
+      alert('Введите корректный email')
+      return
+    }
+    if (typeof password !== 'string' || !password) {
+      alert('Введите пароль')
+      return
+    }
+    if (typeof name !== 'string' || !name) {
+      alert('Введите корректное имя')
+      return
+    }
+
+    await signUp({ variables: { email, password, name } })
   }
-
-  if (loading) return <p>Loading...</p>
-  if (error) return <p>Error: {error.message}</p>
 
   return (
     <div>
@@ -30,7 +40,9 @@ export default function SignUpForm() {
           <Input label='Password' type='password' name='password' required />
         </div>
         <div style={{ marginTop: '1rem', display: 'flex', justifyContent: 'space-between' }}>
-          <Button type='submit'>Зарегистрироваться</Button>
+          <Button type='submit' disabled={loading}>
+            {loading ? 'Регистрация...' : 'Зарегистрироваться'}
+          </Button>
           <Button type='button' onClick={() => push('/auth/signin')}>
             Войти
           </Button>

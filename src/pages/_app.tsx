@@ -5,10 +5,10 @@ import { ApolloClient, InMemoryCache, ApolloProvider, HttpLink } from '@apollo/c
 
 const client = new ApolloClient({
   link: new HttpLink({
-    uri: '/api/graphql'
+    uri: '/api/graphql',
+    credentials: 'include'
   }),
-  cache: new InMemoryCache(),
-  credentials: 'include'
+  cache: new InMemoryCache()
 })
 
 function MyApp({ Component, pageProps }: AppProps) {

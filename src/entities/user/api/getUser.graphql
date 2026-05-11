@@ -1,7 +1,4 @@
-import { gql } from '@apollo/client'
-
-export const GET_USER = gql`
-  query GetUser {
+query GetUser {
     authenticatedItem {
       ... on User {
         id
@@ -10,4 +7,3 @@ export const GET_USER = gql`
       }
     }
   }
-`

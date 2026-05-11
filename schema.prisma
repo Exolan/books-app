@@ -18,6 +18,13 @@ model User {
   password              String
   reviews               Review[]  @relation("Review_user")
   createdAt             DateTime?
+  updatedAt             DateTime?
+  createdBy             User?     @relation("User_createdBy", fields: [createdById], references: [id])
+  createdById           String?   @map("createdBy")
+  updatedBy             User?     @relation("User_updatedBy", fields: [updatedById], references: [id])
+  updatedById           String?   @map("updatedBy")
+  from_User_createdBy   User[]    @relation("User_createdBy")
+  from_User_updatedBy   User[]    @relation("User_updatedBy")
   from_Author_createdBy Author[]  @relation("Author_createdBy")
   from_Author_updatedBy Author[]  @relation("Author_updatedBy")
   from_Genre_createdBy  Genre[]   @relation("Genre_createdBy")
@@ -26,6 +33,9 @@ model User {
   from_Book_updatedBy   Book[]    @relation("Book_updatedBy")
   from_Review_createdBy Review[]  @relation("Review_createdBy")
   from_Review_updatedBy Review[]  @relation("Review_updatedBy")
+
+  @@index([createdById])
+  @@index([updatedById])
 }
 
 model Author {
@@ -61,10 +71,11 @@ model Genre {
 
 model Book {
   id          String    @id @default(cuid())
-  title       String    @unique @default("")
+  title       String    @default("")
   author      Author?   @relation("Book_author", fields: [authorId], references: [id])
   authorId    String?   @map("author")
   genre       Genre[]   @relation("Book_genre")
+  description String    @default("")
   reviews     Review[]  @relation("Review_book")
   createdAt   DateTime?
   updatedAt   DateTime?

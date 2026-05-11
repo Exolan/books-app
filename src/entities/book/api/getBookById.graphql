@@ -1,7 +1,4 @@
-import { gql } from '@apollo/client'
-
-export const GET_BOOK_BY_ID = gql`
-  query GetBookById($id: ID!) {
+query GetBookById($id: ID!) {
     book(where: { id: $id }) {
       title
       author {
@@ -24,4 +21,3 @@ export const GET_BOOK_BY_ID = gql`
       }
     }
   }
-`

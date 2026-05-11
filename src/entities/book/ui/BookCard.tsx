@@ -3,7 +3,8 @@ import { Book } from '../types/book'
 
 export function BookCard({ book }: { book: Book }) {
   const { push } = useRouter()
-  const average = book.reviews.reduce((acc, review) => acc + review.score, 0) / book.reviews.length
+
+  const average = book.reviews ? book.reviews.reduce((acc, review) => acc + Number(review.score), 0) / book.reviews.length : 0
 
   const handleClick = () => {
     push(`/books/${book.id}`)
@@ -13,14 +14,9 @@ export function BookCard({ book }: { book: Book }) {
     <div style={{ border: '1px solid #ccc', borderRadius: '8px', padding: '16px', marginBottom: '16px', cursor: 'pointer' }} onClick={handleClick}>
       <h2>{book.title}</h2>
       <h4>
-        {book.author.firstName} {book.author.lastName}
+        {book.author?.firstName} {book.author?.lastName}
       </h4>
-      <p>
-        Жанр:{' '}
-        {book.genre.map((genre) => (
-          <span key={genre.id}>{genre.name} </span>
-        ))}
-      </p>
+      <p>Жанр: {book.genre?.map((genre) => <span key={genre.id}>{genre.name} </span>)}</p>
       <p>Средняя оценка: {isNaN(average) ? 0 : average.toFixed(1)}</p>
     </div>
   )

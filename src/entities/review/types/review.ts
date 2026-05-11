@@ -1,9 +1,7 @@
-import { User } from 'src/entities/user'
-
 export type Review = {
   id: string
-  text: string
-  score: number
-  user: User
-  createdAt: string
+  text: string | null
+  score: number | null
+  createdAt: string | null
+  user: { id: string; name: string | null } | null
 }
