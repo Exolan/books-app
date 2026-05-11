@@ -10,6 +10,7 @@
     "keystone:start": "keystone start",
     "next:dev": "next dev -p 4000",
     "next:build": "next build",
+    "next:start": "next start",
     "build": "keystone build --no-ui && next build",
     "postinstall": "keystone postinstall",
     "codegen": "graphql-codegen --config codegen.ts",
