@@ -14,7 +14,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 type Documents = {
-    "query GetBookById($id: ID!) {\n  book(where: {id: $id}) {\n    title\n    author {\n      firstName\n      lastName\n    }\n    genre {\n      id\n      name\n    }\n    reviews {\n      id\n      text\n      user {\n        id\n        name\n      }\n      score\n      createdAt\n    }\n  }\n}": typeof types.GetBookByIdDocument,
+    "query GetBookById($id: ID!) {\n  book(where: {id: $id}) {\n    title\n    author {\n      firstName\n      lastName\n    }\n    genre {\n      id\n      name\n    }\n    reviews {\n      id\n      text\n      user {\n        id\n        name\n      }\n      score\n      createdAt\n    }\n    description\n  }\n}": typeof types.GetBookByIdDocument,
     "query GetBooks {\n  books {\n    id\n    title\n    author {\n      firstName\n      lastName\n    }\n    genre {\n      id\n      name\n    }\n    reviews {\n      score\n    }\n  }\n}": typeof types.GetBooksDocument,
     "query GetUser {\n  authenticatedItem {\n    ... on User {\n      id\n      email\n      name\n    }\n  }\n}": typeof types.GetUserDocument,
     "mutation SignOut {\n  endSession\n}": typeof types.SignOutDocument,
@@ -23,7 +23,7 @@ type Documents = {
     "mutation Mutation($data: ReviewCreateInput!) {\n  createReview(data: $data) {\n    text\n    score\n    user {\n      id\n    }\n  }\n}": typeof types.MutationDocument,
 };
 const documents: Documents = {
-    "query GetBookById($id: ID!) {\n  book(where: {id: $id}) {\n    title\n    author {\n      firstName\n      lastName\n    }\n    genre {\n      id\n      name\n    }\n    reviews {\n      id\n      text\n      user {\n        id\n        name\n      }\n      score\n      createdAt\n    }\n  }\n}": types.GetBookByIdDocument,
+    "query GetBookById($id: ID!) {\n  book(where: {id: $id}) {\n    title\n    author {\n      firstName\n      lastName\n    }\n    genre {\n      id\n      name\n    }\n    reviews {\n      id\n      text\n      user {\n        id\n        name\n      }\n      score\n      createdAt\n    }\n    description\n  }\n}": types.GetBookByIdDocument,
     "query GetBooks {\n  books {\n    id\n    title\n    author {\n      firstName\n      lastName\n    }\n    genre {\n      id\n      name\n    }\n    reviews {\n      score\n    }\n  }\n}": types.GetBooksDocument,
     "query GetUser {\n  authenticatedItem {\n    ... on User {\n      id\n      email\n      name\n    }\n  }\n}": types.GetUserDocument,
     "mutation SignOut {\n  endSession\n}": types.SignOutDocument,
@@ -49,7 +49,7 @@ export function gql(source: string): unknown;
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "query GetBookById($id: ID!) {\n  book(where: {id: $id}) {\n    title\n    author {\n      firstName\n      lastName\n    }\n    genre {\n      id\n      name\n    }\n    reviews {\n      id\n      text\n      user {\n        id\n        name\n      }\n      score\n      createdAt\n    }\n  }\n}"): (typeof documents)["query GetBookById($id: ID!) {\n  book(where: {id: $id}) {\n    title\n    author {\n      firstName\n      lastName\n    }\n    genre {\n      id\n      name\n    }\n    reviews {\n      id\n      text\n      user {\n        id\n        name\n      }\n      score\n      createdAt\n    }\n  }\n}"];
+export function gql(source: "query GetBookById($id: ID!) {\n  book(where: {id: $id}) {\n    title\n    author {\n      firstName\n      lastName\n    }\n    genre {\n      id\n      name\n    }\n    reviews {\n      id\n      text\n      user {\n        id\n        name\n      }\n      score\n      createdAt\n    }\n    description\n  }\n}"): (typeof documents)["query GetBookById($id: ID!) {\n  book(where: {id: $id}) {\n    title\n    author {\n      firstName\n      lastName\n    }\n    genre {\n      id\n      name\n    }\n    reviews {\n      id\n      text\n      user {\n        id\n        name\n      }\n      score\n      createdAt\n    }\n    description\n  }\n}"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

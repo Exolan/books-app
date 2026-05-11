@@ -19,5 +19,6 @@ query GetBookById($id: ID!) {
         score
         createdAt
       }
+      description
     }
   }

@@ -57,6 +57,7 @@ export default function BookPage() {
 
         <div>
           <h4>Описание</h4>
+          {book.description ? <p>{book.description}</p> : <p>Нет описания</p>}
         </div>
 
         <div>
