@@ -1,6 +1,7 @@
 import { useMutation } from '@apollo/client'
 import { useRouter } from 'next/navigation'
 import { SignUpDocument } from 'src/shared/api/generated/graphql'
+import { routes } from 'src/shared/routes'
 
 export function useSignUp() {
   const { replace } = useRouter()
@@ -8,7 +9,7 @@ export function useSignUp() {
   const [signUp, { loading }] = useMutation(SignUpDocument, {
     onCompleted: (result) => {
       if (result?.createUser?.id) {
-        replace('/auth/signin')
+        replace(routes.auth.signIn)
       }
     },
 

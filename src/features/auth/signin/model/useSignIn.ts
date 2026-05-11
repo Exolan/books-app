@@ -1,6 +1,7 @@
 import { useMutation } from '@apollo/client'
 import { useRouter } from 'next/navigation'
 import { SignInDocument } from 'src/shared/api/generated/graphql'
+import { routes } from 'src/shared/routes'
 
 export function useSignIn() {
   const { replace } = useRouter()
@@ -10,7 +11,7 @@ export function useSignIn() {
 
       // Проверка, что пользователь вошел
       if (auth && 'item' in auth) {
-        replace('/')
+        replace(routes.home)
       } else {
         alert('Неверный логи или пароль')
       }

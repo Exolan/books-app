@@ -2,6 +2,7 @@ import { useRouter } from 'next/navigation'
 import Button from 'src/shared/ui/Button'
 import Input from 'src/shared/ui/Input'
 import { useSignUp } from '../model/useSignUp'
+import { routes } from 'src/shared/routes'
 
 export function SignUpForm() {
   const { signUp, loading } = useSignUp()
@@ -43,7 +44,7 @@ export function SignUpForm() {
           <Button type='submit' disabled={loading}>
             {loading ? 'Регистрация...' : 'Зарегистрироваться'}
           </Button>
-          <Button type='button' onClick={() => push('/auth/signin')}>
+          <Button type='button' onClick={() => push(routes.auth.signIn)}>
             Войти
           </Button>
         </div>
