@@ -2,12 +2,13 @@ import { useRouter } from 'next/navigation'
 import Button from 'src/shared/ui/Button'
 import Input from 'src/shared/ui/Input'
 import { useSignUp } from '../model/useSignUp'
+import { ApolloError } from '@apollo/client'
 
 export function SignUpForm() {
-  const { signUp, loading, error } = useSignUp()
-  const { push } = useRouter()
+  const { signUp, loading } = useSignUp()
+  const { push, replace } = useRouter()
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const formData = new FormData(event.currentTarget)
     const email = formData.get('email')
@@ -27,11 +28,19 @@ export function SignUpForm() {
       return
     }
 
-    signUp({ variables: { email, password, name } })
+    try {
+      const result = await signUp({ variables: { email, password, name } })
+      if (result.data?.createUser?.id) {
+        replace('/auth/signin')
+      }
+    } catch (error) {
+      if (error instanceof ApolloError) {
+        alert(error.message)
+      } else {
+        alert('Не удалось зарегистрироваться, попробуйте еще раз')
+      }
+    }
   }
-
-  if (loading) return <p>Загрузка...</p>
-  if (error) return <p>Ошибка: {error.message}</p>
 
   return (
     <div>
@@ -43,7 +52,9 @@ export function SignUpForm() {
           <Input label='Password' type='password' name='password' required />
         </div>
         <div style={{ marginTop: '1rem', display: 'flex', justifyContent: 'space-between' }}>
-          <Button type='submit'>Зарегистрироваться</Button>
+          <Button type='submit' disabled={loading}>
+            {loading ? 'Регистрация...' : 'Зарегистрироваться'}
+          </Button>
           <Button type='button' onClick={() => push('/auth/signin')}>
             Войти
           </Button>

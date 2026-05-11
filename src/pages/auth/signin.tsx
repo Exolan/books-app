@@ -1,4 +1,4 @@
-import SignInForm from '../../features/auth/signin/ui/SignInForm'
+import { SignInForm } from 'src/features/auth/signin'
 
 export default function SignIn() {
   return <SignInForm />

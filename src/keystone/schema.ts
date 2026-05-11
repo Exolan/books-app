@@ -86,7 +86,18 @@ export const lists = {
     },
 
     hooks: {
-      resolveInput: withTimestamps
+      resolveInput: withTimestamps,
+      validateInput: async ({ resolvedData, addValidationError, operation, context }) => {
+        if (operation === 'create' && resolvedData.email) {
+          const existingUser = await context.db.User.findOne({
+            where: { email: resolvedData.email }
+          })
+
+          if (existingUser) {
+            addValidationError('Пользователь с таким email уже существует')
+          }
+        }
+      }
     }
   }),
 
