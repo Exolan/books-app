@@ -5,9 +5,9 @@ import Input from 'src/shared/ui/Input'
 
 export function SignInForm() {
   const { push } = useRouter()
-  const { signIn } = useSignIn()
+  const { signIn, loading } = useSignIn()
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const formData = new FormData(event.currentTarget)
     const email = formData.get('email')
@@ -22,7 +22,7 @@ export function SignInForm() {
       return
     }
 
-    signIn({ variables: { email, password } })
+    await signIn({ variables: { email, password } })
   }
 
   return (
@@ -34,7 +34,9 @@ export function SignInForm() {
           <Input label='Password' type='password' name='password' required />
         </div>
         <div style={{ marginTop: '1rem', display: 'flex', justifyContent: 'space-between' }}>
-          <Button type='submit'>Войти</Button>
+          <Button type='submit' disabled={loading}>
+            {loading ? 'Вход...' : 'Войти'}
+          </Button>
           <Button type='button' onClick={() => push('/auth/signup')}>
             Зарегистрироваться
           </Button>

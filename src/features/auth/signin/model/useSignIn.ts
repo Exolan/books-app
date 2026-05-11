@@ -4,7 +4,7 @@ import { SignInDocument } from 'src/shared/api/generated/graphql'
 
 export function useSignIn() {
   const { replace } = useRouter()
-  const [signIn, { data, loading, error }] = useMutation(SignInDocument, {
+  const [signIn, { data, loading }] = useMutation(SignInDocument, {
     onCompleted: (result) => {
       const auth = result.authenticateUserWithPassword
 
@@ -14,6 +14,10 @@ export function useSignIn() {
       } else {
         alert('Неверный логи или пароль')
       }
+    },
+    onError: (error) => {
+      console.error('Ошибка входа', error)
+      alert('Не удалось соединиться с сервером')
     }
   })
 
@@ -23,7 +27,6 @@ export function useSignIn() {
   return {
     signIn,
     user,
-    loading,
-    error
+    loading
   }
 }

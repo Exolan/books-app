@@ -6,7 +6,7 @@ import { ApolloError } from '@apollo/client'
 
 export function SignUpForm() {
   const { signUp, loading } = useSignUp()
-  const { push, replace } = useRouter()
+  const { push } = useRouter()
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -28,18 +28,7 @@ export function SignUpForm() {
       return
     }
 
-    try {
-      const result = await signUp({ variables: { email, password, name } })
-      if (result.data?.createUser?.id) {
-        replace('/auth/signin')
-      }
-    } catch (error) {
-      if (error instanceof ApolloError) {
-        alert(error.message)
-      } else {
-        alert('Не удалось зарегистрироваться, попробуйте еще раз')
-      }
-    }
+    await signUp({ variables: { email, password, name } })
   }
 
   return (
