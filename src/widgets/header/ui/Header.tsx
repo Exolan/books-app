@@ -8,8 +8,8 @@ export default function Header() {
   const { signOut } = useSignOut()
   const { push, refresh } = useRouter()
 
-  const handleLogout = () => {
-    signOut()
+  const handleLogout = async () => {
+    await signOut()
     refresh()
   }
 
