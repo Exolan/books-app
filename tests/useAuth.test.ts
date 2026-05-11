@@ -19,7 +19,7 @@ describe('useAuth', () => {
       data: {
         authenticatedItem: {
           id: '1',
-          name: 'John',
+          name: 'test',
           email: 'test@mail.ru'
         }
       },
@@ -31,7 +31,7 @@ describe('useAuth', () => {
 
     expect(result.current.user).toEqual({
       id: '1',
-      name: 'John',
+      name: 'test',
       email: 'test@mail.ru'
     })
 
