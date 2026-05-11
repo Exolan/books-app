@@ -1,7 +1,6 @@
 import { renderHook } from '@testing-library/react'
 import { useMutation } from '@apollo/client'
-
-import { useCreateReview } from 'src/features/review/createReview/model/useCreateReview'
+import { useCreateReview } from './useCreateReview'
 
 global.alert = jest.fn()
 

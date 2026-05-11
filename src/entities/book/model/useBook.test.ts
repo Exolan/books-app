@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client'
-import { useBook } from 'src/entities/book/model'
+import { useBook } from './useBook'
 import { renderHook } from '@testing-library/react'
 
 jest.mock('@apollo/client', () => ({

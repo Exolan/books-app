@@ -1,7 +1,6 @@
 import { renderHook } from '@testing-library/react'
 import { useQuery } from '@apollo/client'
-
-import { useAuth } from 'src/entities/user/model'
+import { useAuth } from './useAuth'
 
 jest.mock('@apollo/client', () => ({
   useQuery: jest.fn()

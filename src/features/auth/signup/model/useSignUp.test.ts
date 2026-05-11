@@ -1,6 +1,6 @@
 import { renderHook } from '@testing-library/react'
 import { useMutation } from '@apollo/client'
-import { useSignUp } from 'src/features/auth/signup/model/useSignUp'
+import { useSignUp } from './useSignUp'
 
 const replace = jest.fn()
 

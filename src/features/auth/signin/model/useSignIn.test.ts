@@ -1,6 +1,6 @@
 import { renderHook } from '@testing-library/react'
 import { useMutation } from '@apollo/client'
-import { useSignIn } from 'src/features/auth/signin/model/useSignIn'
+import { useSignIn } from './useSignIn'
 
 const replace = jest.fn()
 global.alert = jest.fn()
